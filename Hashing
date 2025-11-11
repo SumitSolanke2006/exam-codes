@@ -1,0 +1,137 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 10
+
+class HashTable{
+  int Table[SIZE];
+  int Flag[SIZE];
+    
+public:
+  HashTable(){
+    for(int i=0; i<SIZE; i++){
+      Table[i]=-1;
+      Flag[i]=0;
+    }
+  }
+  
+  int HashKey(int key){
+    return key % SIZE;
+  }
+  
+  void InsertKey(int key){
+    int index = HashKey(key);
+    int start = index;
+    
+    do{
+      if(Flag[index]==0 || Flag[index]==-1){
+        Table[index]=key;
+        Flag[index]=1;
+        cout<<"The key "<<key<<"placed at index "<<index<<endl;
+        return;
+      }
+      index= (index+1)%SIZE;
+    }while(index!=start);
+    
+    cout<<"The table is full. Can't add key.\n";
+    
+  }
+  
+  void DeleteKey(int key){
+    int index= HashKey(key);
+    int start = index;
+    
+    do{
+      if(Flag[index]==0){
+        cout<<"Can't delete the key. The key is not present."<<endl;
+        return;
+      }
+      
+      if(Flag[index]==1 && Table[index]==key){
+        Table[index]=-1;
+        Flag[index]=-1;
+        cout<<"Key is deleted\n";
+        return;
+      }
+      index=(index+1)%SIZE;
+    }while(index!=start);
+    cout<<"Key not found!\n";
+  }
+  
+  void Search(int key){
+    int index = HashKey(key);
+    int start= index;
+    
+    do{
+      if(Flag[index]==0){
+        cout<<"Key "<<key<<" not found.\n";
+        return;
+      }
+      if(Flag[index]==1 && Table[index]==key){
+        cout<<"Key "<<key<<" found at index "<<index<<endl;
+        return;
+      }
+      index = (index+1)%SIZE;
+    }while(index!=start);
+    cout<<"Key not found!\n";
+  }
+  
+  void Display(){
+    cout<<"Display hash Table:\n";
+    for(int i=0; i<SIZE; i++){
+      cout<<"[ "<<i<<" ] : ";
+      if(Flag[i]==1)
+        cout<<Table[i];
+      else if(Flag[i]==-1)
+        cout<<"Deleted.";
+      else
+        cout<<"Empty.";
+      cout<<endl;
+    }
+  }
+};
+
+int main(){
+  HashTable h;
+  int key, choice;
+  
+  do{
+    cout<<"Hash Table Menu:";
+    cout<<"1.Insert Key\n2.Delete key\n3.Search key\n4.Display Hash Table\n5.Exit\n";
+    cout<<"Enter choice: ";
+    cin>>choice;
+    
+    switch(choice){
+      case 1:
+        cout<<"Enter key to search: ";
+        cin>>key;
+        h.InsertKey(key);
+        break;
+        
+      case 2:
+        cout<<"Enter key to delete: ";
+        cin>>key;
+        h.DeleteKey(key);
+        break;
+        
+      case 3:
+        cout<<"Enter key to Search: ";
+        cin>>key;
+        h.Search(key);
+        break;
+        
+      case 4:
+        h.Display();
+        break;
+        
+      case 5:
+        cout<<"Exit Program!";
+        break;
+        
+      default:
+        cout<<"Enter the valid Choice.";
+        
+    }
+  }while(choice!=5);
+  return 0;
+}
