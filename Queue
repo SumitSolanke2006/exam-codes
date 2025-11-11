@@ -1,0 +1,124 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+
+class callQueue{
+    int front, rare;
+    int customerID[MAX];
+    int callTime[MAX];
+    
+public:
+    callQueue(){
+        front=-1;
+        rare=-1;
+    }
+    
+    void addCall(int id, int time){
+        if(rare==MAX-1){
+            cout<<"The Queue is full. Can't add to Queue.\n";
+            return;
+        }
+        
+        if(front=-1){
+            front=0;
+        }
+        
+        rare++;
+        customerID[rare]=id;
+        callTime[rare]=time;
+        
+        cout<<"Call added at the location: "<<id<<" Call time for the location: "<<time<<endl;
+    }
+    
+    void answerCall(){
+        if(isQueueEmpty()){
+            cout<<"No more call to answer!\n";
+            return;
+        }
+        
+        cout<<"Answering call of Customer ID "<<customerID[front]<< " (Call time "<<callTime[front]<<" minutes\n";
+        
+        front++;
+        
+        if(front>rare){
+            front=-1;
+            rare=-1;
+        }
+    }
+    
+    void viewQueue(){
+        if(isQueueEmpty()){
+            cout<<"The Queue is empty.\n";
+            return;
+        }
+        
+        cout<<"\nCurrent call Queue: ";
+        for(int i=front; i<=rare; i++){
+            cout<<"Customer ID: "<<customerID[i]<<" | Call Time: "<<callTime[i]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    bool isQueueEmpty(){
+        if(rare==-1 || front>rare){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+};
+
+int main(){
+    callQueue cq;
+    int id, time, choice;
+    
+    do{
+        cout<<"Call center Queue Menu:"<<endl;
+        cout<<"1. Add Call\n";
+        cout<<"2. Answer call\n";
+        cout<<"3. View Queue\n";
+        cout<<"4. Check if Queue Empty\n";
+        cout<<"5. Exit\n";
+        cout<<"Enter Choice: ";
+        cin>>choice;
+        
+        switch(choice){
+            case 1:
+                cout<<"Enter customer ID: ";
+                cin>>id;
+                cout<<endl;
+                cout<<"Enter call time: ";
+                cin>>time;
+                cout<<endl;
+                cq.addCall(id,time);
+                break;
+                
+            case 2:
+                cq.answerCall();
+                break;
+                
+            case 3:
+                cq.viewQueue();
+                break;
+                
+            case 4:
+                if(cq.isQueueEmpty()){
+                    cout<<"The Queue is empty.\n";
+                }
+                else{
+                    cout<<"Queue is not Empty.\n";
+                }
+                break;
+                
+            case 5:
+                cout<<"Exiting Program!";
+                break;
+                
+            default:
+                cout<<"Enter valid choice. Try again"<<endl;
+                break;
+        }
+    }while(choice!=5);
+}
