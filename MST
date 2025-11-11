@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+#define n 6   
+
+int findMinKey(int key[], bool included[]) {
+    int min = 9999, minIndex = -1;
+    for (int i = 0; i < n; i++) {
+        if (!included[i] && key[i] < min) {
+            min = key[i];
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
+
+void printMST(int parent[], int graph[n][n]) {
+    int total = 0;
+    cout << "\nEdge\tWeight\n";
+    for (int i = 1; i < n; i++) {
+        cout << parent[i] << " - " << i << "\t" << graph[i][parent[i]] << endl;
+        total += graph[i][parent[i]];
+    }
+    cout << "\nTotal Minimum Cost: " << total << endl;
+}
+
+void primMST(int graph[n][n]) {
+    int parent[n];      // stores MST structure
+    int key[n];         // stores edge weights
+    bool included[n];   // keeps track of included vertices
+
+
+    for (int i = 0; i < n; i++) {
+        key[i] = 9999;
+        included[i] = false;
+    }
+
+    key[0] = 0;      // Start from vertex 0
+    parent[0] = -1;  // Root has no parent
+
+
+    for (int count = 0; count < n - 1; count++) {
+        int u = findMinKey(key, included);  
+        included[u] = true;                
+
+        // Step 3: Update adjacent vertices
+        for (int v = 0; v < n; v++) {
+            if (graph[u][v] && !included[v] && graph[u][v] < key[v]) {
+                parent[v] = u;
+                key[v] = graph[u][v];
+            }
+        }
+    }
+
+    printMST(parent, graph);
+}
+
+int main() {
+    int graph[n][n] = {
+        {0, 10, 20, 0, 0, 0},
+        {10, 0, 30, 5, 0, 0},
+        {20, 30, 0, 15, 6, 0},
+        {0, 5, 15, 0, 8, 9},
+        {0, 0, 6, 8, 0, 12},
+        {0, 0, 0, 9, 12, 0}
+    };
+
+    cout << "Prim’s Algorithm - Minimum Spanning Tree\n";
+    primMST(graph);
+
+    return 0;
+}
